@@ -12,12 +12,19 @@ import androidx.core.view.WindowInsetsCompat;
 import com.cidead.pmdm.foodexplorer.data.api.RetrofitClient;
 import com.cidead.pmdm.foodexplorer.data.model.Country;
 import com.cidead.pmdm.foodexplorer.data.model.CountryResponse;
+import com.cidead.pmdm.foodexplorer.ui.countries.CountryAdapter;
+import com.cidead.pmdm.foodexplorer.ui.countries.CountryViewModel;
 
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,21 +35,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RetrofitClient.getApiService().getCountries().enqueue(new Callback<CountryResponse>() {
-            @Override
-            public void onResponse(Call<CountryResponse> call, Response<CountryResponse> response) {
-                if(response.isSuccessful() && response.body() != null){
-                    List<Country> countries = response.body().getMeals();
-                    for(Country c : countries){
-                        Log.d(TAG, "Country: " + c.getName());
-                    }
-                }
-            }
+        RecyclerView recyclerView = findViewById(R.id.rvCountries);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-            @Override
-            public void onFailure(Call<CountryResponse> call, Throwable t) {
-                Log.e(TAG, "API Error: " + t.getMessage());
-            }
+        CountryViewModel viewModel =
+                new ViewModelProvider(this).get(CountryViewModel.class);
+
+        viewModel.getCountries().observe(this, countries -> {
+            CountryAdapter adapter = new CountryAdapter(countries);
+            recyclerView.setAdapter(adapter);
         });
+
+        viewModel.loadCountries();
+
     }
 }
