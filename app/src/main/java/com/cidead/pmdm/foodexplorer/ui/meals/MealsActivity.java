@@ -1,7 +1,9 @@
 package com.cidead.pmdm.foodexplorer.ui.meals;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +15,7 @@ import com.cidead.pmdm.foodexplorer.R;
 import com.cidead.pmdm.foodexplorer.data.api.RetrofitClient;
 import com.cidead.pmdm.foodexplorer.data.model.Meal;
 import com.cidead.pmdm.foodexplorer.data.model.MealResponse;
+import com.cidead.pmdm.foodexplorer.ui.favorites.FavoritesActivity;
 
 import java.util.List;
 
@@ -22,6 +25,7 @@ import retrofit2.Response;
 
 public class MealsActivity extends AppCompatActivity {
 
+    RecyclerView recyclerView;
     public static final String EXTRA_COUNTRY = "country";
     private static final String TAG = "MealsActivity";
 
@@ -29,22 +33,37 @@ public class MealsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meals);
-
-        RecyclerView recyclerView = findViewById(R.id.rvMeals);
+        Button btnFavorites = findViewById(R.id.btnFavorites);
+        btnFavorites.setOnClickListener(v -> {
+            Intent intent = new Intent(this, FavoritesActivity.class);
+            startActivity(intent);
+        });
+        recyclerView = findViewById(R.id.rvMeals);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         String country = getIntent().getStringExtra(EXTRA_COUNTRY);
         Log.d("MealsActivity", "Country received: " + country);
+
         MealViewModel viewModel =
                 new ViewModelProvider(this).get(MealViewModel.class);
 
         viewModel.getMeals().observe(this, meals -> {
             MealAdapter adapter = new MealAdapter(meals);
             recyclerView.setAdapter(adapter);
+
         });
+
 
 viewModel.loadMeals(country);
 
 
+
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (recyclerView.getAdapter() != null) {
+            recyclerView.getAdapter().notifyDataSetChanged();
+        }    }
+
 }

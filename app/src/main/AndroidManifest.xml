@@ -29,6 +29,9 @@
         <activity
             android:name=".ui.detail.MealDetailActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.favorites.FavoritesActivity"
+            android:exported="true" />
 
 
     </application>

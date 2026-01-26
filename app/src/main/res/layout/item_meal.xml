@@ -13,6 +13,17 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="8dp">
+        <ImageButton
+            android:id="@+id/btnFavoriteItem"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Favorite"
+            android:src="@drawable/outline_favorite_24"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="8dp"/>
+
 
         <ImageView
             android:id="@+id/ivMealThumb"
