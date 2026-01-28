@@ -21,11 +21,19 @@ import java.util.List;
 
 public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.FavViewHolder> {
 
-
+    public interface OnFavoriteRemoved {
+        void onFavoriteRemoved();
+    }
     private final List<FavoriteMeal> favorites;
+    private final OnFavoriteRemovedListener callback;
 
-    public FavoritesAdapter(List<FavoriteMeal> favorites) {
+    public interface OnFavoriteRemovedListener {
+        void onFavoriteRemoved(FavoriteMeal meal);
+    }
+
+    public FavoritesAdapter(List<FavoriteMeal> favorites, OnFavoriteRemovedListener callback) {
         this.favorites = favorites;
+        this.callback = callback;
     }
 
     @NonNull
@@ -39,32 +47,41 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.FavV
     @Override
     public void onBindViewHolder(@NonNull FavViewHolder holder, int position) {
         FavoriteMeal meal = favorites.get(position);
+
         holder.tvMealName.setText(meal.getName());
         Glide.with(holder.itemView.getContext())
                 .load(meal.getThumb())
                 .placeholder(R.drawable.placeholder)
                 .into(holder.ivMealThumb);
 
+        // ❤️ Siempre corazón lleno en favoritos
+        holder.btnFavorite.setImageResource(R.drawable.baseline_favorite_24);
+
+        // 👉 CLICK EN CORAZÓN = eliminar favorito
+        holder.btnFavorite.setOnClickListener(v -> {
+
+            int pos = holder.getAdapterPosition();
+            FavoriteMeal removed = favorites.get(pos);
+
+            FavoritesManager.toggleFavorite(v.getContext(), removed);
+
+            favorites.remove(pos);
+            notifyItemRemoved(pos);
+
+            if (callback != null) {
+                callback.onFavoriteRemoved(removed);
+            }
+        });
+
+
+        // 👉 Click normal abre detalle
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), MealDetailActivity.class);
             intent.putExtra(MealDetailActivity.EXTRA_MEAL_ID, meal.getId());
             v.getContext().startActivity(intent);
         });
-        //marcar/desmarcar favorito
-        holder.btnFavorite.setImageResource(R.drawable.baseline_favorite_24);
-
-        holder.btnFavorite.setOnClickListener(v -> {
-            FavoritesManager.toggleFavorite(
-                    v.getContext(),
-                    meal
-            );
-
-            // eliminar visualmente el item
-            favorites.remove(position);
-            notifyItemRemoved(position);
-        });
-
     }
+
 
     @Override
     public int getItemCount() {

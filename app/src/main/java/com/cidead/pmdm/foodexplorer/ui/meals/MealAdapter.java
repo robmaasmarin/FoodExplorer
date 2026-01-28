@@ -21,6 +21,7 @@ import com.cidead.pmdm.foodexplorer.R;
 import com.cidead.pmdm.foodexplorer.data.model.Meal;
 import com.cidead.pmdm.foodexplorer.ui.detail.MealDetailActivity;
 import com.cidead.pmdm.foodexplorer.utils.FavoritesManager;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -44,15 +45,6 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
     @Override
     public void onBindViewHolder(@NonNull MealViewHolder holder, int position) {
         Meal meal = meals.get(position);
-        holder.tvMealName.setText(meal.getName());
-        Glide.with(holder.itemView.getContext())
-                .load(meal.getThumb())
-                .placeholder(R.drawable.placeholder)
-                .error(R.drawable.error)
-                .into(holder.ivMealThumb);
-
-
-
         // estado inicial icono favorito
         boolean isFavorite = FavoritesManager.isFavorite(
                 holder.itemView.getContext(),
@@ -65,6 +57,17 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
                         : R.drawable.outline_favorite_24
         );
 
+        holder.tvMealName.setText(meal.getName());
+        Glide.with(holder.itemView.getContext())
+                .load(meal.getThumb())
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.error)
+                .into(holder.ivMealThumb);
+
+
+
+
+
         // añadimos acción icono favorito
         holder.btnFavorite.setOnClickListener(v -> {
 
@@ -74,24 +77,68 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
                     meal.getThumb()
             );
 
-            FavoritesManager.toggleFavorite(v.getContext(), fav);
 
-            boolean nowFavorite = FavoritesManager.isFavorite(
+            boolean wasFavorite = FavoritesManager.isFavorite(
                     v.getContext(),
                     meal.getId()
             );
+            FavoritesManager.toggleFavorite(v.getContext(), fav);
+
+            boolean nowFavorite = !wasFavorite;
+
 
             holder.btnFavorite.setImageResource(
                     nowFavorite
                             ? R.drawable.baseline_favorite_24
                             : R.drawable.outline_favorite_24
             );
+
+            if (nowFavorite) {
+                Snackbar.make(
+                        v,
+                        "❤️ Añadido a favoritos",
+                        Snackbar.LENGTH_SHORT
+                ).show();
+            } else {
+                Snackbar.make(
+                        v,
+                        "💔 Eliminado de favoritos",
+                        Snackbar.LENGTH_LONG
+                ).setAction("DESHACER", undo -> {
+                    FavoritesManager.toggleFavorite(v.getContext(), fav);
+                    holder.btnFavorite.setImageResource(
+                            R.drawable.baseline_favorite_24
+                    );
+                }).show();
+            }
+
         });
+        holder.btnFavorite.animate()
+                .scaleX(1.2f)
+                .scaleY(1.2f)
+                .setDuration(150)
+                .withEndAction(() ->
+                        holder.btnFavorite.animate()
+                                .scaleX(1f)
+                                .scaleY(1f)
+                                .setDuration(150)
+                                .start()
+                )
+                .start();
+        holder.btnFavorite.setEnabled(false);
+
+        holder.btnFavorite.postDelayed(
+                () -> holder.btnFavorite.setEnabled(true),
+                300
+        );
+
+
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), MealDetailActivity.class);
             intent.putExtra(MealDetailActivity.EXTRA_MEAL_ID, meal.getId());
             v.getContext().startActivity(intent);
         });
+
 
     }
 

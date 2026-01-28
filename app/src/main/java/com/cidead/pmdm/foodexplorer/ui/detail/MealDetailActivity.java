@@ -102,7 +102,7 @@ public class MealDetailActivity extends AppCompatActivity {
         btnFavorite.setImageResource(
                 isFavorite
                         ? R.drawable.baseline_favorite_24
-                        : R.drawable.baseline_local_police_24
+                        : R.drawable.outline_favorite_24
         );
     }
 }
