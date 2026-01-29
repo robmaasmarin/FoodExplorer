@@ -11,11 +11,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cidead.pmdm.foodexplorer.MainActivity;
 import com.cidead.pmdm.foodexplorer.R;
 import com.cidead.pmdm.foodexplorer.data.api.RetrofitClient;
 import com.cidead.pmdm.foodexplorer.data.model.Meal;
 import com.cidead.pmdm.foodexplorer.data.model.MealResponse;
 import com.cidead.pmdm.foodexplorer.ui.favorites.FavoritesActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
@@ -33,11 +35,7 @@ public class MealsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meals);
-        Button btnFavorites = findViewById(R.id.btnFavorites);
-        btnFavorites.setOnClickListener(v -> {
-            Intent intent = new Intent(this, FavoritesActivity.class);
-            startActivity(intent);
-        });
+
         recyclerView = findViewById(R.id.rvMeals);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -51,6 +49,24 @@ public class MealsActivity extends AppCompatActivity {
             MealAdapter adapter = new MealAdapter(meals);
             recyclerView.setAdapter(adapter);
 
+        });
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+
+            if (id == R.id.nav_home) {
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                return true;
+
+            } else if (id == R.id.nav_favorites) {
+                Intent intent = new Intent(this, FavoritesActivity.class);
+                startActivity(intent);
+                return true;
+            }
+
+            return false;
         });
 
 

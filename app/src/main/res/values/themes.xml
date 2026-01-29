@@ -6,4 +6,16 @@
     </style>
 
     <style name="Theme.FoodExplorer" parent="Base.Theme.FoodExplorer" />
+    <style name="Theme.FoodExplorer.Splash" parent="Theme.SplashScreen">
+        <!-- Color de fondo -->
+        <item name="windowSplashScreenBackground">@color/mi_rojo</item>
+        <!-- Icono central -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logosquare</item>
+
+        <!-- Color del icono -->
+        <item name="windowSplashScreenIconBackgroundColor">@color/black</item>
+
+        <!-- Tema que se aplica después -->
+        <item name="postSplashScreenTheme">@style/Theme.FoodExplorer</item>
+    </style>
 </resources>

@@ -11,12 +11,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cidead.pmdm.foodexplorer.MainActivity;
 import com.cidead.pmdm.foodexplorer.R;
 import com.cidead.pmdm.foodexplorer.data.model.FavoriteMeal;
 import com.cidead.pmdm.foodexplorer.data.model.Meal;
 import com.cidead.pmdm.foodexplorer.ui.detail.MealDetailActivity;
 import com.cidead.pmdm.foodexplorer.ui.meals.MealAdapter;
 import com.cidead.pmdm.foodexplorer.utils.FavoritesManager;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -61,6 +63,24 @@ public class FavoritesActivity extends AppCompatActivity {
 
         rvFavorites.setAdapter(adapterFav);
         tvEmptyFavorites = findViewById(R.id.tvEmptyFavorites);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+
+            if (id == R.id.nav_home) {
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                return true;
+
+            } else if (id == R.id.nav_favorites) {
+                Intent intent = new Intent(this, FavoritesActivity.class);
+                startActivity(intent);
+                return true;
+            }
+
+            return false;
+        });
 
 
 
