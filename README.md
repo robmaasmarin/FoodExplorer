@@ -78,6 +78,7 @@ ui/
 
 utils/
  └── FavoritesManager.java
+ ```
 
 
 - **UI layer:** Activities + Adapters
@@ -89,15 +90,20 @@ utils/
 
 ## 📸 Screenshots
 
-- Splash – Loading screen
-![Splash screen](/screenshots/splash.png)
-- Home – Countries list
-- Meals list  
-![Meals screen](/screenshots/meals.png)
-- Meal detail  
-![Meal detail](/screenshots/detail.png)
-- Favorites screen  
-![Favorites screen](/screenshots/favorites.png)
+### Splash Screen
+![Splash screen](screenshots/splash.png)
+
+### Home
+![Home screen](screenshots/home.png)
+
+### Meals List
+![Meals screen](screenshots/meals.png)
+
+### Meal Detail
+![Meal detail](screenshots/detail.png)
+
+### Favorites
+![Favorites screen](screenshots/favorites.png)
 
 ---
 
@@ -124,6 +130,4 @@ utils/
 
 ## 👨‍💻 Author
 
-Developed by **Roberto Abelleira Pesqueira**  
-
-
+Developed by **Roberto Abelleira Pesqueira**   
