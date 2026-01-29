@@ -90,11 +90,14 @@ utils/
 ## 📸 Screenshots
 
 - Splash – Loading screen
-![Splash screen](screenshots/splash.png)
+![Splash screen](/screenshots/splash.png)
 - Home – Countries list
-- Meals list
-- Meal detail
-- Favorites screen
+- Meals list  
+![Meals screen](/screenshots/meals.png)
+- Meal detail  
+![Meal detail](/screenshots/detail.png)
+- Favorites screen  
+![Favorites screen](/screenshots/favorites.png)
 
 ---
 
